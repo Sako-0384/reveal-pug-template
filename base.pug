@@ -1,0 +1,69 @@
+mixin slide(title, slide_theme, highlighting_theme)
+  doctype html
+  html
+    head
+      meta(charset='utf-8')
+      meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+      title= title
+      link(rel='stylesheet', href='public/css/reveal.css')
+      link(rel='stylesheet', href=`public/css/theme/${slide_theme}.css`)
+      // Theme used for syntax highlighting of code
+      link(rel='stylesheet', href=`public/lib/css/${highlighting_theme}.css`)
+      // Printing and PDF exports
+      script.
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'public/css/print/pdf.css' : 'public/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    body
+      .reveal
+        .slides
+          block
+      script(src='public/lib/js/head.min.js')
+      script(src='public/js/reveal.js')
+      script(src='public/js/osc-browser.min.js')
+      script.
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+          math: {
+            mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+            config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+          },
+          dependencies: [
+            {src: 'public/plugin/math/math.js', async: true},
+            {src: 'public/plugin/markdown/marked.js'},
+            {src: 'public/plugin/markdown/markdown.js'},
+            {src: 'public/plugin/notes/notes.js', async: true},
+            {
+              src: 'public/plugin/highlight/highlight.js',
+              async: true,
+              callback: function () {
+                hljs.initHighlightingOnLoad();
+              }
+            }
+          ],
+          progress: false,
+          transition: 'slide',
+          transitionSpeed: 'fast',
+          history: true,
+        });
+
+mixin group(label)
+  section.slide-group(data-label=label)
+    block
+
+mixin page(notes, label)
+  section(data-label=label data-notes=notes)
+    block
+
+mixin md-page(notes, label)
+  section(data-label=label data-notes=notes data-markdown)
+    textarea(data-template)
+      block
+
+mixin frag(cl)
+  span.fragment(class=cl)
+    block
